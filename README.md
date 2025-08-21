@@ -39,3 +39,7 @@ A FastAPI-based backend for uploading, parsing, and managing files (CSV, Excel, 
 
 ## Postman Collection
 - Import `file_parser_api.json` into Postman for testing all endpoints.
+
+## WebSocket Support
+- Connect to `ws://127.0.0.1:8000/ws/progress/{file_id}` for real-time progress updates.
+- Example: Use Postman or `wscat` to receive progress updates during file parsing.
