@@ -2,33 +2,31 @@ import os
 import uuid
 import time
 import json
-from datetime import datetime
+from datetime import datetime, timezone  # Updated import
 from typing import List
-
-from fastapi import FastAPI, UploadFile, File, Request, BackgroundTasks, HTTPException
+import asyncio  # Added for WebSocket
+from fastapi import FastAPI, UploadFile, File, Request, BackgroundTasks, HTTPException, WebSocket  # Added WebSocket
 from fastapi.responses import JSONResponse
 import sqlalchemy as sa
-from sqlalchemy import create_engine, Column, String, DateTime, JSON
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base  # Updated import
 import pandas as pd
 from pypdf import PdfReader
 
 app = FastAPI()
 
 # Database Setup
-engine = create_engine('sqlite:///files.db', echo=False)
+engine = sa.create_engine('sqlite:///files.db', echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+Base = declarative_base()  # Updated to use orm.declarative_base()
 
 class FileModel(Base):
     __tablename__ = "files"
-    id = Column(String, primary_key=True, index=True)
-    filename = Column(String)
-    status = Column(String)
-    created_at = Column(DateTime)
-    file_path = Column(String)
-    parsed_content = Column(JSON)
+    id = sa.Column(sa.String, primary_key=True, index=True)
+    filename = sa.Column(sa.String)
+    status = sa.Column(sa.String)
+    created_at = sa.Column(sa.DateTime)
+    file_path = sa.Column(sa.String)
+    parsed_content = sa.Column(sa.JSON)
 
 Base.metadata.create_all(bind=engine)
 
@@ -114,7 +112,7 @@ async def upload_file(request: Request, file: UploadFile = File(...), background
             id=file_id,
             filename=file.filename,
             status="processing",
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),  # Updated to timezone-aware
             file_path=file_path,
             parsed_content=None
         )
@@ -184,3 +182,12 @@ def delete_file(file_id: str):
     db.close()
     progress_data.pop(file_id, None)
     return {"message": "File deleted"}
+
+@app.websocket("/ws/progress/{file_id}")
+async def websocket_progress(websocket: WebSocket, file_id: str):
+    await websocket.accept()
+    while file_id in progress_data:
+        await websocket.send_json({"file_id": file_id, **progress_data[file_id]})
+        await asyncio.sleep(1)
+    await websocket.send_json({"file_id": file_id, "status": "completed", "progress": 100})
+    await websocket.close()
