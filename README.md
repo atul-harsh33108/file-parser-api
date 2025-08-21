@@ -36,3 +36,6 @@ A FastAPI-based backend for uploading, parsing, and managing files (CSV, Excel, 
 - CSV: Successfully uploaded, parsed, and retrieved: `[{"name":"Alice","age":30},...]`.
 - PDF: Successfully extracted text: `[{"page":1,"text":"E-commerce Product..."},...]`.
 - Excel: Successfully parsed: `[{"name":"Alice","age":30},...]`.
+
+## Postman Collection
+- Import `file_parser_api.json` into Postman for testing all endpoints.
