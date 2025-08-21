@@ -54,7 +54,7 @@ def parse_file(file_id: str, file_path: str, filename: str):
             df = pd.read_csv(file_path)
             parsed = df.to_dict(orient='records')
         elif filename.endswith('.xlsx'):
-            df = pd.read_excel(file_path)
+            df = pd.read_excel(file_path, engine='openpyxl')
             parsed = df.to_dict(orient='records')
         elif filename.endswith('.pdf'):
             reader = PdfReader(file_path)
@@ -78,6 +78,7 @@ def parse_file(file_id: str, file_path: str, filename: str):
         progress_data[file_id]["status"] = "ready"
         progress_data[file_id]["progress"] = 100
     except Exception as e:
+        print(f"Error parsing file {file_id}: {str(e)}")  # Log error
         progress_data[file_id]["status"] = "failed"
         progress_data[file_id]["progress"] = 0
         db = SessionLocal()

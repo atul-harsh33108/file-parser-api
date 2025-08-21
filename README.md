@@ -31,3 +31,8 @@ A FastAPI-based backend for uploading, parsing, and managing files (CSV, Excel, 
 ## Limitations
 - Progress tracking uses in-memory storage (not persistent).
 - Parsing delay is simulated (~10 seconds).
+
+## Test Results
+- CSV: Successfully uploaded, parsed, and retrieved: `[{"name":"Alice","age":30},...]`.
+- PDF: Successfully extracted text: `[{"page":1,"text":"E-commerce Product..."},...]`.
+- Excel: Successfully parsed: `[{"name":"Alice","age":30},...]`.
