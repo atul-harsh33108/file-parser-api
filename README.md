@@ -5,7 +5,7 @@ A FastAPI-based backend for uploading, parsing, and managing files (CSV, Excel, 
 ## Setup
 1. Clone the repo: `git clone <your-repo-url>`
 2. Create and activate virtual environment: `python -m venv venv`, `venv\Scripts\activate`
-3. Install dependencies: `pip install fastapi uvicorn sqlalchemy pandas openpyxl pypdf`
+3. Install dependencies: `pip install fastapi uvicorn sqlalchemy pandas openpyxl pypdf` or do this to Install dependencies: `pip install -r requirements.txt`
 4. Run the server: `uvicorn main:app --reload`
 5. API available at `http://127.0.0.1:8000`
 
