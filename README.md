@@ -268,3 +268,4 @@ The API was tested with the provided sample files:
 - **Documentation**: This `README.md` provides comprehensive setup, usage, and testing instructions.
 - **Testing**: Unit tests (`pytest`) and Postman collection (`file_parser_api.json`) included.
 - **Bonus Feature**: WebSocket endpoint for real-time progress updates.
+- - **Maintainer**: Atul Harsh (GitHub: [atul-harsh33108](https://github.com/atul-harsh33108)).
